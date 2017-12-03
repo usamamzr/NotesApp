@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.usama.noteitproject.Fragments.NotesDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tvDescHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:text="Heading"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvDescBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvDescHead"
+        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="Body" />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="Edit" />
+
+</RelativeLayout>
