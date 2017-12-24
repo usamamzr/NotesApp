@@ -31,16 +31,11 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NoteFragment extends Fragment {
-
-
-    private static final String TAG = "MTAG";
 
     RecyclerView recyclerView;
     RecyclerAdapter adapter;
@@ -51,7 +46,7 @@ public class NoteFragment extends Fragment {
         // Required empty public constructor
     }
 
-    ArrayList<Note> arrayList = new ArrayList<>();
+    ArrayList arrayList = new ArrayList();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void test(NoteEvent customEvent) {
@@ -61,9 +56,6 @@ public class NoteFragment extends Fragment {
         String str = gson.toJson(customEvent.getMessage());
 
         Log.i("check", str);
-
-
-        //mAdapter.changeset(lostDetailList1);
 
     }
 
@@ -76,9 +68,8 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
 
-//        final RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this.getContext(), arrayList);
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_note, container, false);
 
         adapter = new RecyclerAdapter(this.getContext(), arrayList);
@@ -87,16 +78,8 @@ public class NoteFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
         addButton = view.findViewById(R.id.btnAddNote);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.19:8000/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        NoteAPI service = retrofit.create(NoteAPI.class);
-
-        Call<ArrayList<Note>> noteList = service.getNotesList();
 
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(this.getContext());
@@ -105,6 +88,10 @@ public class NoteFragment extends Fragment {
         progressDialog.setTitle("Please wait");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
+
+        NoteAPI service = NoteAPI.retrofit.create(NoteAPI.class);
+
+        Call<ArrayList<Note>> noteList = service.getNotesList();
 
         noteList.enqueue(new Callback<ArrayList<Note>>() {
             @Override
@@ -120,11 +107,14 @@ public class NoteFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<Note>> call, Throwable t) {
-
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Failure", Toast.LENGTH_LONG).show();
+                Log.i("response_check", "onFailure() called with: call = [" + call + "], t = [" + t + "]");
             }
         });
+
+
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override

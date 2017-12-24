@@ -6,9 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
     app:contentPadding="5dp"
+    android:layout_marginHorizontal="2dp"
     android:id="@+id/cardView"
     android:clickable="true"
     android:contextClickable="true"
+    android:foreground="?selectableItemBackground"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -17,11 +19,13 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:layout_alignBottom="@+id/tvDesc"
             android:layout_toStartOf="@+id/tvHeading"
-            android:src="@drawable/ic_short_text_android"  />
+            android:src="@drawable/ic_short_text_android" />
 
         <TextView
             android:id="@+id/tvId"
@@ -33,6 +37,7 @@
             android:layout_toEndOf="@+id/tvHeading"
             android:text="ID"
             tools:textSize="20sp" />
+
         <TextView
             android:id="@+id/tvHeading"
             android:layout_width="wrap_content"
@@ -57,7 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:text="Delete" />
+            android:background="@color/cardview_light_background"
+            android:text="Delete"
+            android:textColor="@color/colorPrimary" />
 
     </RelativeLayout>
 

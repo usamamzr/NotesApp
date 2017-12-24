@@ -34,6 +34,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="30dp"
         android:layout_marginEnd="30dp"
-        android:text="Edit" />
+        android:background="@color/colorPrimary"
+        android:text="Edit"
+        android:textAlignment="center"
+        android:textColor="#ffff"
+        android:visibility="visible" />
 
 </RelativeLayout>

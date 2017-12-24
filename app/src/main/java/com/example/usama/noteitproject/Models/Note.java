@@ -3,17 +3,15 @@ package com.example.usama.noteitproject.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 /**
  * Created by Usama on 11/26/2017.
  */
 
-public class Note extends ArrayList<Note> {
+public class Note {
 
     @SerializedName("id")
     @Expose
-    private String id;
+    private int id;
 
     @SerializedName("title")
     @Expose
@@ -24,8 +22,8 @@ public class Note extends ArrayList<Note> {
     private String desc;
     //public String head, desc;
 
-    public Note(String head, String desc) {
-//        this.id = id;
+    public Note() {
+        this.id = id;
         this.head = head;
         this.desc = desc;
     }
@@ -38,11 +36,11 @@ public class Note extends ArrayList<Note> {
                 '}';
     }*/
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

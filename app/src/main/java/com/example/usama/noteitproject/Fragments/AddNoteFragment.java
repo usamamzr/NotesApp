@@ -18,8 +18,6 @@ import com.example.usama.noteitproject.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,23 +44,19 @@ public class AddNoteFragment extends Fragment {
 
         btnSaveAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
                 String head = etHead.getText().toString().trim();
                 String desc = etDesc.getText().toString().trim();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.1.19:8000/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                NoteAPI service = retrofit.create(NoteAPI.class);
+                NoteAPI service = NoteAPI.retrofit.create(NoteAPI.class);
 
                 Call<Note> noteList = service.saveNote(head, desc);
 
                 noteList.enqueue(new Callback<Note>() {
                     @Override
                     public void onResponse(Call<Note> call, Response<Note> response) {
+//                        Snackbar.make(v, "Note Added", Snackbar.LENGTH_LONG).show();
                         Toast.makeText(getContext(), "Note Added", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getContext(), NoteFragmentActivity.class);
                         startActivity(intent);
@@ -70,6 +64,7 @@ public class AddNoteFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<Note> call, Throwable t) {
+//                        Snackbar.make(v, "Failed to add note", Snackbar.LENGTH_LONG).setAction("Retry", null).show();
                         Toast.makeText(getContext(), "Failed to add note", Toast.LENGTH_LONG).show();
                     }
                 });
