@@ -16,10 +16,9 @@
         android:icon="@drawable/document_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:testOnly="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.usama.noteitproject.SplashScreenActivity"
+            android:name="com.example.usama.noteitproject.Activities.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,10 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.usama.noteitproject.NoteFragmentActivity" />
-        <activity android:name="com.example.usama.noteitproject.NotesDetailActivity" />
-        <activity android:name="com.example.usama.noteitproject.AddNoteActivity" />
-        <activity android:name="com.example.usama.noteitproject.EditNoteActivity" />
+        <activity android:name="com.example.usama.noteitproject.Activities.NoteFragmentActivity" />
+        <activity android:name="com.example.usama.noteitproject.Activities.NotesDetailActivity" />
+        <activity android:name="com.example.usama.noteitproject.Activities.AddNoteActivity" />
+        <activity android:name="com.example.usama.noteitproject.Activities.EditNoteActivity" />
 
         <meta-data
             android:name="android.support.VERSION"

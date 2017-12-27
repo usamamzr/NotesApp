@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,10 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.example.usama.noteitproject.Activities.AddNoteActivity;
 import com.example.usama.noteitproject.Adapters.RecyclerAdapter;
-import com.example.usama.noteitproject.AddNoteActivity;
 import com.example.usama.noteitproject.Events.NoteEvent;
 import com.example.usama.noteitproject.Models.Note;
 import com.example.usama.noteitproject.NoteAPI;
@@ -70,7 +70,7 @@ public class NoteFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         EventBus.getDefault().register(this);
-        View view = inflater.inflate(R.layout.fragment_note, container, false);
+        final View view = inflater.inflate(R.layout.fragment_note, container, false);
 
         adapter = new RecyclerAdapter(this.getContext(), arrayList);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -96,10 +96,10 @@ public class NoteFragment extends Fragment {
         noteList.enqueue(new Callback<ArrayList<Note>>() {
             @Override
             public void onResponse(Call<ArrayList<Note>> call, Response<ArrayList<Note>> response) {
+
                 progressDialog.dismiss();
                 Log.i("response_check", "onResponse() called with: call = [" + call + "], response = [" + response + "]");
                 ArrayList<Note> NoteDetailList = response.body();
-                Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
                 adapter.setNotesList(NoteDetailList);
                 NoteEvent noteEvent = new NoteEvent(NoteDetailList);
                 EventBus.getDefault().post(noteEvent);
@@ -107,14 +107,12 @@ public class NoteFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<Note>> call, Throwable t) {
+
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Failure", Toast.LENGTH_LONG).show();
+                Snackbar.make(view, "Failed to Fetch Data", Snackbar.LENGTH_LONG).show();
                 Log.i("response_check", "onFailure() called with: call = [" + call + "], t = [" + t + "]");
             }
         });
-
-
-
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +121,6 @@ public class NoteFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         /*final ArrayList<Note> arrayList = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {

@@ -11,7 +11,7 @@ public class Note {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private String id;
 
     @SerializedName("title")
     @Expose
@@ -36,11 +36,11 @@ public class Note {
                 '}';
     }*/
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

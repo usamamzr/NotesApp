@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.usama.noteitproject.Activities.NotesDetailActivity;
 import com.example.usama.noteitproject.Models.Note;
-import com.example.usama.noteitproject.NotesDetailActivity;
+import com.example.usama.noteitproject.NoteAPI;
 import com.example.usama.noteitproject.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.squareup.picasso.Picasso;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Usama on 10/28/2017.
@@ -27,12 +31,30 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<Note> listItems;
-    Context context;
+    private List<Note> listItems;
+    private Context context;
 
     public RecyclerAdapter(Context context, ArrayList<Note> arrayList) {
         this.context = context;
         this.listItems = arrayList;
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView noteID, noteHead, noteDesc;
+        Button deleteButton;
+        ImageView imageView;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+
+            imageView = itemView.findViewById(R.id.img);
+            noteID = itemView.findViewById(R.id.tvId);
+            noteHead = itemView.findViewById(R.id.tvHeading);
+            noteDesc = itemView.findViewById(R.id.tvDesc);
+            deleteButton = itemView.findViewById(R.id.btnDel);
+
+        }
     }
 
     public void setNotesList(ArrayList<Note> arrayList) {
@@ -51,7 +73,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         context = holder.imageView.getContext();
-//        holder.noteID.setText(this.listItems.get((int) getItemId(position)).getId());
+        holder.noteID.setText(this.listItems.get(position).getId());
         holder.noteHead.setText(this.listItems.get(position).getHead());
         holder.noteDesc.setText(this.listItems.get(position).getDesc());
 
@@ -63,37 +85,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                listItems.remove(position);
+            public void onClick(final View v) {
 
-                /*NoteAPI service = NoteAPI.retrofit.create(NoteAPI.class);
+                int noteId = Integer.parseInt(listItems.get(position).getId());
 
-                final Call<Note> delRequest = service.deleteNote(position);
+                NoteAPI service = NoteAPI.retrofit.create(NoteAPI.class);
 
-                delRequest.enqueue(new Callback<Note>() {
+                Call<String> deleteNote = service.deleteNote(noteId);
+
+                deleteNote.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<Note> call, Response<Note> response) {
-                        // use response.code, response.headers, etc.
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Snackbar.make(v, "Note Deleted", Snackbar.LENGTH_SHORT).show();
+                        listItems.remove(position);
+                        notifyDataSetChanged();
                         Log.i("response_check", "onResponse() called with: call = [" + call + "], response = [" + response + "]");
-                        *//*Note NoteDetailList = response.body();
-                        Toast.makeText(RecyclerAdapter.this.context,"Success",Toast.LENGTH_LONG).show();
-                        this.deleteNote(NoteDetailList);
-                        NoteEvent noteEvent = new NoteEvent(NoteDetailList);
-                        EventBus.getDefault().post(noteEvent);*//*
                     }
 
                     @Override
-                    public void onFailure(Call<Note> call, Throwable t) {
-                        // handle failure
-                        Toast.makeText(RecyclerAdapter.this.context,"Failure",Toast.LENGTH_LONG).show();
-
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Snackbar.make(v, "Failed to Delete Note", Snackbar.LENGTH_SHORT).show();
+                        Log.i("response_check", "onFailure() called with: call = [" + call + "], t = [" + t + "]");
                     }
-                });*/
-
-                notifyDataSetChanged();
-
-                Snackbar.make(v, "Note Deleted", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                });
             }
         });
 
@@ -109,23 +123,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         });
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView noteID, noteHead, noteDesc;
-        public Button deleteButton;
-        public ImageView imageView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            imageView = itemView.findViewById(R.id.img);
-            noteID = itemView.findViewById(R.id.tvId);
-            noteHead = itemView.findViewById(R.id.tvHeading);
-            noteDesc = itemView.findViewById(R.id.tvDesc);
-            deleteButton = itemView.findViewById(R.id.btnDel);
-
-        }
-    }
 
     @Override
     public int getItemCount() {

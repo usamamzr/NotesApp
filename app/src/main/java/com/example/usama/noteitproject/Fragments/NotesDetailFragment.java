@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.usama.noteitproject.EditNoteActivity;
+import com.example.usama.noteitproject.Activities.EditNoteActivity;
 import com.example.usama.noteitproject.Events.NoteDetailEvent;
 import com.example.usama.noteitproject.Models.Note;
 import com.example.usama.noteitproject.R;
@@ -25,8 +25,8 @@ import org.greenrobot.eventbus.Subscribe;
 public class NotesDetailFragment extends Fragment {
 
 
-    TextView tvDescHead, tvDescBody;
-    Button btnEdit;
+    TextView tvDescHead, tvDescBody, tvDescId;
+    Button btnEdit, btnDel;
     View view;
     Gson gson;
     NotesDetailFragment context = this;
@@ -37,7 +37,7 @@ public class NotesDetailFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_notes_detail, container, false);
@@ -45,12 +45,14 @@ public class NotesDetailFragment extends Fragment {
         gson = new Gson();
         EventBus.getDefault().register(this);
 
-        tvDescHead = (TextView) view.findViewById(R.id.tvDescHead);
-        tvDescBody = (TextView) view.findViewById(R.id.tvDescBody);
-        btnEdit = (Button) view.findViewById(R.id.btnEdit);
+        tvDescId = view.findViewById(R.id.tvDescId);
+        tvDescHead = view.findViewById(R.id.tvDescHead);
+        tvDescBody = view.findViewById(R.id.tvDescBody);
+        btnEdit = view.findViewById(R.id.btnEdit);
+
 
         gson = new Gson();
-        String target = getActivity().getIntent().getStringExtra("Details");
+        String target = getActivity().getIntent().getStringExtra("Detail");
         final Note note = gson.fromJson(target, Note.class);
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +61,7 @@ public class NotesDetailFragment extends Fragment {
                 Gson gson = new Gson();
                 String string = gson.toJson(note);
                 Intent intent = new Intent(getContext(), EditNoteActivity.class);
-                intent.putExtra("Detail", string);
+                intent.putExtra("Details", string);
                 context.startActivity(intent);
             }
         });
@@ -68,15 +70,17 @@ public class NotesDetailFragment extends Fragment {
     }
 
     @Subscribe
-    public void onEvent (NoteDetailEvent noteDetailEvent){
+    public void onEvent(NoteDetailEvent noteDetailEvent) {
         String string = noteDetailEvent.getMessage();
         Note note = gson.fromJson(string, Note.class);
 
-        String head = note.getHead().toString();
-        String body = note.getDesc().toString();
+        String head = note.getHead();
+        String body = note.getDesc();
+        String id = note.getId();
 
         tvDescHead.setText(head);
         tvDescBody.setText(body);
+        tvDescId.setText(id);
     }
 
 }
